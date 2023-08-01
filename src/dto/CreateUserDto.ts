@@ -1,9 +1,11 @@
+import { Transform } from 'class-transformer';
 import {
   IsString,
   IsNotEmpty,
   IsEmail,
   MinLength,
   MaxLength,
+  Matches,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -24,4 +26,14 @@ export class CreateUserDto {
     message: 'O campo "senha" deve ter no mínimo 6 caracteres.',
   })
   password!: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @MinLength(3)
+  @MaxLength(20)
+  @Matches(/^[a-zA-Z ]*$/, {
+    message: 'O nome deve conter apenas letras e espaços.',
+  })
+  @Transform(({ value }) => value?.trim())
+  name!: string;
 }

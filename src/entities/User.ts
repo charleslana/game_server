@@ -23,6 +23,19 @@ export class User {
   @Exclude({ toPlainOnly: true })
   password!: string;
 
+  @Column({ type: 'varchar', length: 20 })
+  name!: string;
+
+  @Column({ type: 'bigint', default: 0 })
+  credit!: number;
+
+  @CreateDateColumn({
+    name: 'banned_time',
+    type: 'timestamp',
+    nullable: true,
+  })
+  bannedTime!: Date | null;
+
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',

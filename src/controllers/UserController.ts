@@ -5,6 +5,7 @@ import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { instanceToPlain } from 'class-transformer';
 import { sendResponse } from '@/utils/utils';
+import { UpdateNamedDto } from '@/dto/UpdateNameDto';
 import { UpdatePasswordDto } from '@/dto/UpdatePasswordDto';
 import { User } from '@/entities/User';
 import { UserService } from '@/services/UserService';
@@ -70,6 +71,27 @@ export default class UserController {
         userId,
         updatePasswordDto
       );
+      return response.send(reply, lang);
+    } catch (error) {
+      if (error instanceof ErrorResponse) {
+        return error.send(reply, lang);
+      }
+      return sendResponse(reply, error);
+    }
+  }
+
+  @PATCH('/name')
+  async updateName(request: FastifyRequest, reply: FastifyReply) {
+    logger.info('Atualizar nome do usuário');
+    const lang = request.headers['accept-language'] || 'en';
+    const errorResponse = await validationMiddleware(UpdateNamedDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    const dto: UpdateNamedDto = request.body as UpdateNamedDto;
+    const userId = request.user.id;
+    try {
+      const response = await this.userService.updateName(userId, dto);
       return response.send(reply, lang);
     } catch (error) {
       if (error instanceof ErrorResponse) {

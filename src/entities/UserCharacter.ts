@@ -1,4 +1,5 @@
 import BreedEnum from '@/enum/BreedEnum';
+import { Exclude } from 'class-transformer';
 import { User } from '@/entities/User';
 import {
   Column,
@@ -19,7 +20,7 @@ export class UserCharacter {
   name!: string;
 
   @Column({ type: 'int', default: 1 })
-  level!: string;
+  level!: number;
 
   @Column({
     type: 'enum',
@@ -27,7 +28,58 @@ export class UserCharacter {
   })
   breed!: BreedEnum;
 
+  @Column({ type: 'int', default: 1 })
+  life!: number;
+
+  @Column({ type: 'int', default: 1 })
+  ki!: number;
+
+  @Column({ type: 'int', default: 1 })
+  strength!: number;
+
+  @Column({ type: 'int', default: 1 })
+  endurance!: number;
+
+  @Column({ type: 'int', default: 1 })
+  speed!: number;
+
+  @Column({ type: 'int', default: 10 })
+  point!: number;
+
+  @Column({ name: 'spent_point', type: 'int', nullable: true })
+  spentPoint!: number | null;
+
+  @Column({ type: 'bigint', default: 0 })
+  zeni!: number;
+
+  @Column({ type: 'int', default: 0 })
+  honor!: number;
+
+  @Column({ name: 'name_color', type: 'varchar', length: 7, nullable: true })
+  nameColor!: string | null;
+
+  @Column({ type: 'int', default: 100 })
+  stamina!: number;
+
+  @Column({ type: 'bigint', default: 0 })
+  experience!: number;
+
+  @CreateDateColumn({
+    name: 'name_time',
+    type: 'timestamp',
+    nullable: true,
+  })
+  nameTime!: Date | null;
+
+  @CreateDateColumn({
+    name: 'vip_time',
+    type: 'timestamp',
+    nullable: true,
+  })
+  vipTime!: Date | null;
+
   @Column({ type: 'boolean', default: true })
+  @Exclude({ toPlainOnly: true })
   active!: boolean;
 
   @CreateDateColumn({

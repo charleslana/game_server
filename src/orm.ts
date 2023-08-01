@@ -9,6 +9,7 @@ const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   entities: [join(__dirname, '/entities/*{.ts,.js}')],
   synchronize: true,
+  useUTC: true,
   logging: true,
 });
 

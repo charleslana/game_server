@@ -3,7 +3,9 @@ import { AuthDto } from '@/dto/AuthDto';
 import { AuthService } from './AuthService';
 import { CreateUserDto } from '@/dto/CreateUserDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
+import { formatDate } from '@/utils/utils';
 import { SuccessResponse } from '@/helpers/SuccessResponse';
+import { UpdateNamedDto } from '@/dto/UpdateNameDto';
 import { UpdatePasswordDto } from '@/dto/UpdatePasswordDto';
 import { User } from '@/entities/User';
 import { UserRepository } from '@/repositories/UserRepository';
@@ -39,6 +41,9 @@ export class UserService {
     const user = await this.userRepository.findByEmail(dto.email);
     if (!user) {
       throw new ErrorResponse('user.email.password.invalid', 401);
+    }
+    if (user.bannedTime != null && user.bannedTime > new Date()) {
+      throw new ErrorResponse('user.banned', 401, formatDate(user.bannedTime));
     }
     const passwordMatches = await bcrypt.compare(dto.password, user.password);
     if (!passwordMatches) {
@@ -78,5 +83,18 @@ export class UserService {
     user.password = newPasswordHash;
     await this.userRepository.save(user);
     return new SuccessResponse('user.password.updated');
+  }
+
+  async updateName(
+    userId: number,
+    dto: UpdateNamedDto
+  ): Promise<SuccessResponse> {
+    const user = await this.userRepository.findById(userId);
+    if (!user) {
+      throw new ErrorResponse('user.not.found');
+    }
+    user.name = dto.name;
+    await this.userRepository.save(user);
+    return new SuccessResponse('user.name.updated');
   }
 }
