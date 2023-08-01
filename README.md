@@ -12,6 +12,13 @@
 npm i
 ```
 
+### Docker compose
+
+```bash
+sudo apt install docker-compose
+docker-compose up -d
+```
+
 ### Run dev
 
 ```bash
@@ -22,11 +29,4 @@ npm run dev
 
 ```bash
 npm run start
-```
-
-### Docker compose
-
-```bash
-sudo apt install docker-compose
-docker-compose up -d
 ```
