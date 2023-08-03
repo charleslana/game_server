@@ -1,6 +1,6 @@
 import AppDataSource from '@/orm';
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
-import { ILike, Repository } from 'typeorm';
+import { ILike, Not, Repository } from 'typeorm';
 import { UserCharacter } from '@/entities/UserCharacter';
 
 export class UserCharacterRepository {
@@ -65,6 +65,16 @@ export class UserCharacterRepository {
   async existsByName(name: string): Promise<boolean> {
     const existingCharacter = await this.userCharacterRepository.findOne({
       where: { name: ILike(name) },
+    });
+    return !!existingCharacter;
+  }
+
+  async existsByNameAndNotCharacterId(
+    name: string,
+    characterId: number
+  ): Promise<boolean> {
+    const existingCharacter = await this.userCharacterRepository.findOne({
+      where: { name: ILike(name), id: Not(characterId) },
     });
     return !!existingCharacter;
   }

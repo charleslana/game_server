@@ -1,25 +1,22 @@
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
-import { generateRandomString } from '@/utils/utils';
+import { formatDate, generateRandomString } from '@/utils/utils';
 import { SuccessResponse } from '@/helpers/SuccessResponse';
+import { UpdateUserCharacterNameDto } from '@/dto/UpdateUserCharacterNameDto';
 import { UserCharacter } from '@/entities/UserCharacter';
 import { UserCharacterRepository } from '@/repositories/UserCharacterRepository';
 
 export class UserCharacterService {
   private userCharacterRepository = new UserCharacterRepository();
   private characterMaxAmount = 3;
+  private hourOfNameTime = 1;
 
   async create(dto: CreateUserCharacterDto): Promise<SuccessResponse> {
     const count = await this.countUserCharacters(dto.user.id);
     if (count >= this.characterMaxAmount) {
       throw new ErrorResponse('user.character.max.amount');
     }
-    const nameExists = await this.userCharacterRepository.existsByName(
-      dto.name
-    );
-    if (nameExists) {
-      throw new ErrorResponse('user.character.name.exists');
-    }
+    await this.checkCharacterNameExists(dto.name);
     await this.userCharacterRepository.save(dto);
     return new SuccessResponse('user.character.success', 201);
   }
@@ -69,7 +66,51 @@ export class UserCharacterService {
     const userCharacter = await this.getByIdAndUserId(userId, characterId);
     userCharacter.image = image;
     await this.userCharacterRepository.save(userCharacter);
-    return new SuccessResponse('user.name.updated');
+    return new SuccessResponse('user.character.image.updated');
+  }
+
+  async updateName(
+    userId: number,
+    characterId: number,
+    dto: UpdateUserCharacterNameDto
+  ): Promise<SuccessResponse> {
+    const userCharacter = await this.getByIdAndUserId(userId, characterId);
+    if (userCharacter.nameTime != null && userCharacter.nameTime > new Date()) {
+      throw new ErrorResponse(
+        'user.character.name.time',
+        400,
+        formatDate(userCharacter.nameTime)
+      );
+    }
+    await this.checkCharacterNameExistsForOtherPlayer(dto.name, characterId);
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours() + this.hourOfNameTime);
+    userCharacter.name = dto.name;
+    userCharacter.nameTime = currentDate;
+    await this.userCharacterRepository.save(userCharacter);
+    return new SuccessResponse('user.character.name.updated');
+  }
+
+  private async checkCharacterNameExistsForOtherPlayer(
+    name: string,
+    characterId: number
+  ): Promise<void> {
+    const nameExists =
+      await this.userCharacterRepository.existsByNameAndNotCharacterId(
+        name,
+        characterId
+      );
+
+    if (nameExists) {
+      throw new ErrorResponse('user.character.name.exists');
+    }
+  }
+
+  private async checkCharacterNameExists(name: string): Promise<void> {
+    const nameExists = await this.userCharacterRepository.existsByName(name);
+    if (nameExists) {
+      throw new ErrorResponse('user.character.name.exists');
+    }
   }
 
   private async countUserCharacters(userId: number): Promise<number> {

@@ -24,6 +24,10 @@ export class MessageHandler {
       'upload.size.max.file':
         'Invalid file size. Maximum up to 500 KB allowed.',
       'upload.file.not.found': 'Upload file not found.',
+      'user.character.image.updated': 'Character image updated successfully',
+      'user.character.name.time':
+        'You cannot change the avatar now, wait until {param}',
+      'user.character.name.updated': 'Character name updated successfully',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -49,6 +53,12 @@ export class MessageHandler {
       'upload.size.max.file':
         'Tamanho de arquivo inválido. Máximo de até 500 KB permitido.',
       'upload.file.not.found': 'Arquivo do upload não encontrado.',
+      'user.character.image.updated':
+        'Imagem do personagem atualizada com sucesso',
+      'user.character.name.time':
+        'Você não pode alterar o avatar agora, espere até {param}',
+      'user.character.name.updated':
+        'Nome do personagem atualizado com sucesso',
     },
   };
 

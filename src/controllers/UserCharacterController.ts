@@ -1,11 +1,12 @@
 import logger from '@/utils/logger';
 import { authMiddleware } from '@/middlewares/authMiddleware';
-import { Controller, DELETE, GET, Hook, POST } from 'fastify-decorators';
+import { Controller, DELETE, GET, Hook, PATCH, POST } from 'fastify-decorators';
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { instanceToPlain } from 'class-transformer';
 import { sendResponse } from '@/utils/utils';
+import { UpdateUserCharacterNameDto } from '@/dto/UpdateUserCharacterNameDto';
 import { User } from '@/entities/User';
 import { UserCharacter } from '@/entities/UserCharacter';
 import { UserCharacterService } from '@/services/UserCharacterService';
@@ -151,6 +152,36 @@ export default class UserCharacterController {
     const userId = request.user.id;
     try {
       const response = await this.userCharacterService.inactivate(userId, id);
+      return response.send(reply, lang);
+    } catch (error) {
+      if (error instanceof ErrorResponse) {
+        return error.send(reply, lang);
+      }
+      return sendResponse(reply, error);
+    }
+  }
+
+  @PATCH('/name')
+  async updateName(request: FastifyRequest, reply: FastifyReply) {
+    logger.info('Atualizar nome do personagem');
+    const lang = request.headers['accept-language'] || 'en';
+    const errorResponse = await validationMiddleware(
+      UpdateUserCharacterNameDto,
+      request
+    );
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    const dto: UpdateUserCharacterNameDto =
+      request.body as UpdateUserCharacterNameDto;
+    const userId = request.user.id;
+    const characterId = request.session.userCharacterId || 0;
+    try {
+      const response = await this.userCharacterService.updateName(
+        userId,
+        characterId,
+        dto
+      );
       return response.send(reply, lang);
     } catch (error) {
       if (error instanceof ErrorResponse) {
