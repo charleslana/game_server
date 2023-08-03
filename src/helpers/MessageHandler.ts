@@ -16,6 +16,14 @@ export class MessageHandler {
       'user.character.not.found': 'Character not found',
       'user.character.inactivated': 'Character deleted successfully',
       'user.character.name.exists': 'Character name already exists',
+      'upload.is.multipart':
+        'Invalid request: Multipart form-data is expected.',
+      'upload.no.file': 'No files found in the request.',
+      'upload.is.image.valid':
+        'Invalid file format. Only JPG and PNG files are allowed.',
+      'upload.size.max.file':
+        'Invalid file size. Maximum up to 500 KB allowed.',
+      'upload.file.not.found': 'Upload file not found.',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -33,6 +41,14 @@ export class MessageHandler {
       'user.character.not.found': 'Personagem não encontrado',
       'user.character.inactivated': 'Personagem excluído com sucesso',
       'user.character.name.exists': 'Nome do personagem já existe',
+      'upload.is.multipart':
+        'Solicitação inválida: Multipart form-data é esperado.',
+      'upload.no.file': 'Nenhum arquivo encontrado na solicitação.',
+      'upload.is.image.valid':
+        'Formato de arquivo inválido. Somente arquivos JPG e PNG são permitidos.',
+      'upload.size.max.file':
+        'Tamanho de arquivo inválido. Máximo de até 500 KB permitido.',
+      'upload.file.not.found': 'Arquivo do upload não encontrado.',
     },
   };
 

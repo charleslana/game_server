@@ -1,6 +1,7 @@
 import AppDataSource from '@/orm';
 import fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
+import fastifyMultipart from '@fastify/multipart';
 import fastifySession from '@fastify/session';
 import logger from './utils/logger';
 import { bootstrap } from 'fastify-decorators';
@@ -16,11 +17,6 @@ AppDataSource.initialize()
 
 const app = fastify();
 
-app.register(bootstrap, {
-  directory: resolve(__dirname, `controllers`),
-  mask: /Controller\.[jt]s$/,
-});
-
 app.register(fastifyCookie);
 
 app.register(fastifySession, {
@@ -28,6 +24,13 @@ app.register(fastifySession, {
   cookie: {
     secure: false,
   },
+});
+
+app.register(fastifyMultipart);
+
+app.register(bootstrap, {
+  directory: resolve(__dirname, `controllers`),
+  mask: /Controller\.[jt]s$/,
 });
 
 export default app;

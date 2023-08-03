@@ -53,7 +53,7 @@ export class UserService {
     return token;
   }
 
-  async getById(id: number): Promise<User | null> {
+  async getById(id: number): Promise<User> {
     const user = await this.userRepository.findById(id);
     if (!user) {
       throw new ErrorResponse('user.not.found');
@@ -65,10 +65,7 @@ export class UserService {
     userId: number,
     updatePasswordDto: UpdatePasswordDto
   ): Promise<SuccessResponse> {
-    const user = await this.userRepository.findById(userId);
-    if (!user) {
-      throw new ErrorResponse('user.not.found');
-    }
+    const user = await this.getById(userId);
     const passwordMatches = await bcrypt.compare(
       updatePasswordDto.password,
       user.password
@@ -89,10 +86,7 @@ export class UserService {
     userId: number,
     dto: UpdateNamedDto
   ): Promise<SuccessResponse> {
-    const user = await this.userRepository.findById(userId);
-    if (!user) {
-      throw new ErrorResponse('user.not.found');
-    }
+    const user = await this.getById(userId);
     user.name = dto.name;
     await this.userRepository.save(user);
     return new SuccessResponse('user.name.updated');

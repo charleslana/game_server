@@ -42,10 +42,7 @@ export class UserCharacterService {
     return await this.userCharacterRepository.findAllByUserId(userId);
   }
 
-  async getByIdAndUserId(
-    userId: number,
-    id: number
-  ): Promise<UserCharacter | null> {
+  async getByIdAndUserId(userId: number, id: number): Promise<UserCharacter> {
     const userCharacter = await this.userCharacterRepository.findByIdAndUserId(
       userId,
       id
@@ -56,12 +53,23 @@ export class UserCharacterService {
     return userCharacter;
   }
 
-  async getById(id: number): Promise<UserCharacter | null> {
+  async getById(id: number): Promise<UserCharacter> {
     const userCharacter = await this.userCharacterRepository.findById(id);
     if (!userCharacter) {
       throw new ErrorResponse('user.character.not.found');
     }
     return userCharacter;
+  }
+
+  async updateImage(
+    userId: number,
+    characterId: number,
+    image: string
+  ): Promise<SuccessResponse> {
+    const userCharacter = await this.getByIdAndUserId(userId, characterId);
+    userCharacter.image = image;
+    await this.userCharacterRepository.save(userCharacter);
+    return new SuccessResponse('user.name.updated');
   }
 
   private async countUserCharacters(userId: number): Promise<number> {

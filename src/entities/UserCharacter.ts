@@ -1,5 +1,5 @@
 import BreedEnum from '@/enum/BreedEnum';
-import { Exclude } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 import { User } from '@/entities/User';
 import {
   Column,
@@ -77,6 +77,19 @@ export class UserCharacter {
     nullable: true,
   })
   vipTime!: Date | null;
+
+  @Column({ type: 'text', nullable: true })
+  @Exclude({ toPlainOnly: true })
+  image!: string | null;
+
+  @Expose()
+  get avatar(): string | null {
+    if (this.image) {
+      return `${process.env.HOST}/public/upload/character/${this.image}`;
+    } else {
+      return null;
+    }
+  }
 
   @Column({ type: 'boolean', default: true })
   @Exclude({ toPlainOnly: true })
