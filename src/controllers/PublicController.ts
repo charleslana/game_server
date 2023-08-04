@@ -2,6 +2,7 @@ import fs from 'fs';
 import logger from '@/utils/logger';
 import mimeTypes from 'mime-types';
 import { AuthDto } from '@/dto/AuthDto';
+import { bodyValidationMiddleware } from '@/middlewares/bodyValidationMiddleware';
 import { Controller, GET, POST } from 'fastify-decorators';
 import { CreateUserDto } from '@/dto/CreateUserDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
@@ -9,7 +10,6 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { sendResponse } from '@/utils/utils';
 import { UploadService } from '@/services/UploadService';
 import { UserService } from '@/services/UserService';
-import { validationMiddleware } from '@/middlewares/validationMiddleware';
 
 @Controller('/public')
 export default class PublicController {
@@ -20,7 +20,10 @@ export default class PublicController {
   async register(request: FastifyRequest, reply: FastifyReply) {
     logger.info('Cadastrar usuário');
     const lang = request.headers['accept-language'] || 'en';
-    const errorResponse = await validationMiddleware(CreateUserDto, request);
+    const errorResponse = await bodyValidationMiddleware(
+      CreateUserDto,
+      request
+    );
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }
@@ -40,7 +43,7 @@ export default class PublicController {
   async login(request: FastifyRequest, reply: FastifyReply) {
     logger.info('Realizando login');
     const lang = request.headers['accept-language'] || 'en';
-    const errorResponse = await validationMiddleware(AuthDto, request);
+    const errorResponse = await bodyValidationMiddleware(AuthDto, request);
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }

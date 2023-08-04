@@ -28,6 +28,10 @@ export class MessageHandler {
       'user.character.name.time':
         'You cannot change the avatar now, wait until {param}',
       'user.character.name.updated': 'Character name updated successfully',
+      'group.name.exists': 'Group name already exists, try another name',
+      'group.tag.exists': 'Group tag already exists, try another tag',
+      'group.success': 'Group created successfully',
+      'session.unauthorized': 'Session unauthorized',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -59,6 +63,10 @@ export class MessageHandler {
         'Você não pode alterar o avatar agora, espere até {param}',
       'user.character.name.updated':
         'Nome do personagem atualizado com sucesso',
+      'group.name.exists': 'O nome do grupo já existe, tente outro nome',
+      'group.tag.exists': 'A tag do grupo já existe, tente outra tag',
+      'group.success': 'Grupo criado com sucesso',
+      'session.unauthorized': 'Sessão não autorizado',
     },
   };
 

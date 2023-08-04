@@ -3,7 +3,7 @@ import { FastifyRequest } from 'fastify';
 import { plainToClass } from 'class-transformer';
 import { validate, ValidationError } from 'class-validator';
 
-export async function validationMiddleware<T extends object>(
+export async function bodyValidationMiddleware<T extends object>(
   type: new () => T,
   request: FastifyRequest
 ): Promise<ErrorResponse | undefined> {

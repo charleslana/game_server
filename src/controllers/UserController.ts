@@ -1,5 +1,6 @@
 import logger from '@/utils/logger';
 import { authMiddleware } from '@/middlewares/authMiddleware';
+import { bodyValidationMiddleware } from '@/middlewares/bodyValidationMiddleware';
 import { Controller, GET, Hook, PATCH } from 'fastify-decorators';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { FastifyReply, FastifyRequest } from 'fastify';
@@ -9,7 +10,6 @@ import { UpdateNamedDto } from '@/dto/UpdateNameDto';
 import { UpdatePasswordDto } from '@/dto/UpdatePasswordDto';
 import { User } from '@/entities/User';
 import { UserService } from '@/services/UserService';
-import { validationMiddleware } from '@/middlewares/validationMiddleware';
 
 @Controller('/user')
 export default class UserController {
@@ -56,7 +56,7 @@ export default class UserController {
   async updatePassword(request: FastifyRequest, reply: FastifyReply) {
     logger.info('Atualizar senha do usuário');
     const lang = request.headers['accept-language'] || 'en';
-    const errorResponse = await validationMiddleware(
+    const errorResponse = await bodyValidationMiddleware(
       UpdatePasswordDto,
       request
     );
@@ -84,7 +84,10 @@ export default class UserController {
   async updateName(request: FastifyRequest, reply: FastifyReply) {
     logger.info('Atualizar nome do usuário');
     const lang = request.headers['accept-language'] || 'en';
-    const errorResponse = await validationMiddleware(UpdateNamedDto, request);
+    const errorResponse = await bodyValidationMiddleware(
+      UpdateNamedDto,
+      request
+    );
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }

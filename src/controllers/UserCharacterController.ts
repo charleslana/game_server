@@ -1,5 +1,6 @@
 import logger from '@/utils/logger';
 import { authMiddleware } from '@/middlewares/authMiddleware';
+import { bodyValidationMiddleware } from '@/middlewares/bodyValidationMiddleware';
 import { Controller, DELETE, GET, Hook, PATCH, POST } from 'fastify-decorators';
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
@@ -10,7 +11,6 @@ import { UpdateUserCharacterNameDto } from '@/dto/UpdateUserCharacterNameDto';
 import { User } from '@/entities/User';
 import { UserCharacter } from '@/entities/UserCharacter';
 import { UserCharacterService } from '@/services/UserCharacterService';
-import { validationMiddleware } from '@/middlewares/validationMiddleware';
 
 @Controller('/character')
 export default class UserCharacterController {
@@ -29,7 +29,7 @@ export default class UserCharacterController {
   async register(request: FastifyRequest, reply: FastifyReply) {
     logger.info('Criar personagem');
     const lang = request.headers['accept-language'] || 'en';
-    const errorResponse = await validationMiddleware(
+    const errorResponse = await bodyValidationMiddleware(
       CreateUserCharacterDto,
       request
     );
@@ -165,7 +165,7 @@ export default class UserCharacterController {
   async updateName(request: FastifyRequest, reply: FastifyReply) {
     logger.info('Atualizar nome do personagem');
     const lang = request.headers['accept-language'] || 'en';
-    const errorResponse = await validationMiddleware(
+    const errorResponse = await bodyValidationMiddleware(
       UpdateUserCharacterNameDto,
       request
     );
