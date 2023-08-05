@@ -4,9 +4,11 @@ import { authMiddleware } from '@/middlewares/authMiddleware';
 import { Controller, GET, Hook } from 'fastify-decorators';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { IdDto } from '@/dto/IdDto';
 import { instanceToPlain } from 'class-transformer';
-import { sendResponse } from '@/utils/utils';
+import { paramsValidationMiddleware } from '@/middlewares/paramsValidationMiddleware';
 import { roleMiddleware } from '@/middlewares/roleMiddleware';
+import { sendResponse } from '@/utils/utils';
 import { UserService } from '@/services/UserService';
 
 @Controller('/admin')
@@ -33,14 +35,18 @@ export default class UserController {
 
   @GET('/user/:id')
   async getById(
-    request: FastifyRequest<{ Params: { id: number } }>,
+    request: FastifyRequest<{ Params: IdDto }>,
     reply: FastifyReply
   ) {
-    const { id } = request.params;
-    logger.info(`Buscar detalhes do usuário com id: ${id}`);
+    logger.info(`Buscar detalhes do usuário com id: ${request.params.id}`);
     const lang = request.headers['accept-language'] || 'en';
+    const errorResponse = await paramsValidationMiddleware(IdDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    const dto: IdDto = request.params;
     try {
-      const user = await this.userService.getById(id);
+      const user = await this.userService.getById(dto.id);
       reply.send(instanceToPlain(user));
     } catch (error) {
       if (error instanceof ErrorResponse) {

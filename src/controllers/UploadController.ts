@@ -4,6 +4,7 @@ import { Controller, Hook, PATCH } from 'fastify-decorators';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { sendResponse } from '@/utils/utils';
+import { sessionMiddleware } from '@/middlewares/sessionMiddleware';
 import { UploadService } from '@/services/UploadService';
 
 @Controller('/upload')
@@ -14,6 +15,15 @@ export default class UploadController {
   async validateAuthenticate(request: FastifyRequest, reply: FastifyReply) {
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await authMiddleware(request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+  }
+
+  @Hook('preHandler')
+  async validateSession(request: FastifyRequest, reply: FastifyReply) {
+    const lang = request.headers['accept-language'] || 'en';
+    const errorResponse = await sessionMiddleware(request);
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }

@@ -68,7 +68,7 @@ export default class UserCharacterController {
     request: FastifyRequest<{ Params: PageDto }>,
     reply: FastifyReply
   ) {
-    logger.info('Buscar grupo paginado');
+    logger.info(`Buscar grupo paginado pela pagina: ${request.params.page}`);
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await paramsValidationMiddleware(PageDto, request);
     if (errorResponse) {

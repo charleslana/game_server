@@ -63,20 +63,14 @@ export class UserService {
 
   async updatePassword(
     userId: number,
-    updatePasswordDto: UpdatePasswordDto
+    dto: UpdatePasswordDto
   ): Promise<SuccessResponse> {
     const user = await this.getById(userId);
-    const passwordMatches = await bcrypt.compare(
-      updatePasswordDto.password,
-      user.password
-    );
+    const passwordMatches = await bcrypt.compare(dto.password, user.password);
     if (!passwordMatches) {
       throw new ErrorResponse('user.password.invalid');
     }
-    const newPasswordHash = await bcrypt.hash(
-      updatePasswordDto.newPassword,
-      this.saltRounds
-    );
+    const newPasswordHash = await bcrypt.hash(dto.newPassword, this.saltRounds);
     user.password = newPasswordHash;
     await this.userRepository.save(user);
     return new SuccessResponse('user.password.updated');

@@ -26,7 +26,7 @@ export class MessageHandler {
       'upload.file.not.found': 'Upload file not found.',
       'user.character.image.updated': 'Character image updated successfully',
       'user.character.name.time':
-        'You cannot change the avatar now, wait until {param}',
+        'You cannot change the name now, wait until {param}',
       'user.character.name.updated': 'Character name updated successfully',
       'group.name.exists': 'Group name already exists, try another name',
       'group.tag.exists': 'Group tag already exists, try another tag',
@@ -60,13 +60,13 @@ export class MessageHandler {
       'user.character.image.updated':
         'Imagem do personagem atualizada com sucesso',
       'user.character.name.time':
-        'Você não pode alterar o avatar agora, espere até {param}',
+        'Você não pode alterar o nome agora, espere até {param}',
       'user.character.name.updated':
         'Nome do personagem atualizado com sucesso',
       'group.name.exists': 'O nome do grupo já existe, tente outro nome',
       'group.tag.exists': 'A tag do grupo já existe, tente outra tag',
       'group.success': 'Grupo criado com sucesso',
-      'session.unauthorized': 'Sessão não autorizado',
+      'session.unauthorized': 'Sessão não autorizada',
     },
   };
 

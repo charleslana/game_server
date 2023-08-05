@@ -5,7 +5,9 @@ import { Controller, DELETE, GET, Hook, PATCH, POST } from 'fastify-decorators';
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { FastifyReply, FastifyRequest } from 'fastify';
+import { IdDto } from '@/dto/IdDto';
 import { instanceToPlain } from 'class-transformer';
+import { paramsValidationMiddleware } from '@/middlewares/paramsValidationMiddleware';
 import { sendResponse } from '@/utils/utils';
 import { UpdateUserCharacterNameDto } from '@/dto/UpdateUserCharacterNameDto';
 import { User } from '@/entities/User';
@@ -26,7 +28,10 @@ export default class UserCharacterController {
   }
 
   @POST()
-  async register(request: FastifyRequest, reply: FastifyReply) {
+  async create(
+    request: FastifyRequest<{ Body: CreateUserCharacterDto }>,
+    reply: FastifyReply
+  ) {
     logger.info('Criar personagem');
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await bodyValidationMiddleware(
@@ -36,8 +41,7 @@ export default class UserCharacterController {
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }
-    const createUserCharacterDto: CreateUserCharacterDto =
-      request.body as CreateUserCharacterDto;
+    const createUserCharacterDto: CreateUserCharacterDto = request.body;
     const userId = request.user.id;
     try {
       const user: User = new User();
@@ -92,14 +96,20 @@ export default class UserCharacterController {
 
   @GET('/profile/:id')
   async getProfile(
-    request: FastifyRequest<{ Params: { id: number } }>,
+    request: FastifyRequest<{ Params: IdDto }>,
     reply: FastifyReply
   ) {
-    const { id } = request.params;
-    logger.info(`Buscar detalhes do personagem do usuário com id: ${id}`);
+    logger.info(
+      `Buscar detalhes do personagem do usuário com id: ${request.params.id}`
+    );
     const lang = request.headers['accept-language'] || 'en';
+    const errorResponse = await paramsValidationMiddleware(IdDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    const dto: IdDto = request.params;
     try {
-      const user = await this.userCharacterService.getById(id);
+      const user = await this.userCharacterService.getById(dto.id);
       reply.send(instanceToPlain(user));
     } catch (error) {
       if (error instanceof ErrorResponse) {
@@ -111,16 +121,20 @@ export default class UserCharacterController {
 
   @GET('/select/:id')
   async select(
-    request: FastifyRequest<{ Params: { id: number } }>,
+    request: FastifyRequest<{ Params: IdDto }>,
     reply: FastifyReply
   ) {
-    const { id } = request.params;
-    logger.info(`Selecionar personagem com id: ${id}`);
+    logger.info(`Selecionar personagem com id: ${request.params.id}`);
     const userId = request.user.id;
     const lang = request.headers['accept-language'] || 'en';
+    const errorResponse = await paramsValidationMiddleware(IdDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    const dto: IdDto = request.params;
     try {
-      await this.userCharacterService.getByIdAndUserId(userId, id);
-      request.session.userCharacterId = id;
+      await this.userCharacterService.getByIdAndUserId(userId, dto.id);
+      request.session.userCharacterId = dto.id;
       reply.send();
     } catch (error) {
       if (error instanceof ErrorResponse) {
@@ -143,15 +157,22 @@ export default class UserCharacterController {
 
   @DELETE('/:id')
   async delete(
-    request: FastifyRequest<{ Params: { id: number } }>,
+    request: FastifyRequest<{ Params: IdDto }>,
     reply: FastifyReply
   ) {
-    const { id } = request.params;
-    logger.info('Deletar personagem');
+    logger.info(`Deletar personagem com id: ${request.params.id}`);
     const lang = request.headers['accept-language'] || 'en';
     const userId = request.user.id;
+    const errorResponse = await paramsValidationMiddleware(IdDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    const dto: IdDto = request.params;
     try {
-      const response = await this.userCharacterService.inactivate(userId, id);
+      const response = await this.userCharacterService.inactivate(
+        userId,
+        dto.id
+      );
       return response.send(reply, lang);
     } catch (error) {
       if (error instanceof ErrorResponse) {
@@ -162,7 +183,10 @@ export default class UserCharacterController {
   }
 
   @PATCH('/name')
-  async updateName(request: FastifyRequest, reply: FastifyReply) {
+  async updateName(
+    request: FastifyRequest<{ Body: UpdateUserCharacterNameDto }>,
+    reply: FastifyReply
+  ) {
     logger.info('Atualizar nome do personagem');
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await bodyValidationMiddleware(
@@ -172,8 +196,7 @@ export default class UserCharacterController {
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }
-    const dto: UpdateUserCharacterNameDto =
-      request.body as UpdateUserCharacterNameDto;
+    const dto: UpdateUserCharacterNameDto = request.body;
     const userId = request.user.id;
     const characterId = request.session.userCharacterId || 0;
     try {

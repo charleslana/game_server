@@ -17,7 +17,10 @@ export default class PublicController {
   private uploadService = new UploadService();
 
   @POST('/user/register')
-  async register(request: FastifyRequest, reply: FastifyReply) {
+  async register(
+    request: FastifyRequest<{ Body: CreateUserDto }>,
+    reply: FastifyReply
+  ) {
     logger.info('Cadastrar usuário');
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await bodyValidationMiddleware(
@@ -27,7 +30,7 @@ export default class PublicController {
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }
-    const createUserDto: CreateUserDto = request.body as CreateUserDto;
+    const createUserDto: CreateUserDto = request.body;
     try {
       const response = await this.userService.create(createUserDto);
       return response.send(reply, lang);
@@ -40,14 +43,14 @@ export default class PublicController {
   }
 
   @POST('/user/login')
-  async login(request: FastifyRequest, reply: FastifyReply) {
+  async login(request: FastifyRequest<{ Body: AuthDto }>, reply: FastifyReply) {
     logger.info('Realizando login');
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await bodyValidationMiddleware(AuthDto, request);
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }
-    const authDto: AuthDto = request.body as AuthDto;
+    const authDto: AuthDto = request.body;
     try {
       const token = await this.userService.authenticateAndGenerateToken(
         authDto

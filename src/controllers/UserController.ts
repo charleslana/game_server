@@ -53,7 +53,10 @@ export default class UserController {
   }
 
   @PATCH('/password')
-  async updatePassword(request: FastifyRequest, reply: FastifyReply) {
+  async updatePassword(
+    request: FastifyRequest<{ Body: UpdatePasswordDto }>,
+    reply: FastifyReply
+  ) {
     logger.info('Atualizar senha do usuário');
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await bodyValidationMiddleware(
@@ -63,14 +66,10 @@ export default class UserController {
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }
-    const updatePasswordDto: UpdatePasswordDto =
-      request.body as UpdatePasswordDto;
+    const dto: UpdatePasswordDto = request.body;
     const userId = request.user.id;
     try {
-      const response = await this.userService.updatePassword(
-        userId,
-        updatePasswordDto
-      );
+      const response = await this.userService.updatePassword(userId, dto);
       return response.send(reply, lang);
     } catch (error) {
       if (error instanceof ErrorResponse) {
@@ -81,7 +80,10 @@ export default class UserController {
   }
 
   @PATCH('/name')
-  async updateName(request: FastifyRequest, reply: FastifyReply) {
+  async updateName(
+    request: FastifyRequest<{ Body: UpdateNamedDto }>,
+    reply: FastifyReply
+  ) {
     logger.info('Atualizar nome do usuário');
     const lang = request.headers['accept-language'] || 'en';
     const errorResponse = await bodyValidationMiddleware(
@@ -91,7 +93,7 @@ export default class UserController {
     if (errorResponse) {
       return errorResponse.send(reply, lang);
     }
-    const dto: UpdateNamedDto = request.body as UpdateNamedDto;
+    const dto: UpdateNamedDto = request.body;
     const userId = request.user.id;
     try {
       const response = await this.userService.updateName(userId, dto);
