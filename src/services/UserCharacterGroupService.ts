@@ -16,4 +16,11 @@ export class UserCharacterGroupService {
     await this.repository.save(dto);
     return new SuccessResponse('invite.group.success', 201);
   }
+
+  async getAll(
+    groupId: number,
+    active: boolean
+  ): Promise<UserCharacterGroup[]> {
+    return await this.repository.findAllByGroupIdAndActive(groupId, active);
+  }
 }

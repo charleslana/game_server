@@ -1,4 +1,5 @@
 import AppDataSource from '@/orm';
+import CronJobService from './services/CronjobService';
 import fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
 import fastifyMultipart from '@fastify/multipart';
@@ -14,6 +15,8 @@ AppDataSource.initialize()
   .catch(error => {
     logger.error('Erro ao conectar ao banco de dados:', error);
   });
+
+CronJobService.start();
 
 const app = fastify();
 
