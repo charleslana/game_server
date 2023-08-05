@@ -32,6 +32,10 @@ export class MessageHandler {
       'group.tag.exists': 'Group tag already exists, try another tag',
       'group.success': 'Group created successfully',
       'session.unauthorized': 'Session unauthorized',
+      'invite.group.exists':
+        'An invitation request already exists for this group',
+      'invite.group.success':
+        'Group invitation request successfully, wait for a leader or captain to accept you',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -67,6 +71,10 @@ export class MessageHandler {
       'group.tag.exists': 'A tag do grupo já existe, tente outra tag',
       'group.success': 'Grupo criado com sucesso',
       'session.unauthorized': 'Sessão não autorizada',
+      'invite.group.exists':
+        'Já existe uma solicitação de convite para este grupo',
+      'invite.group.success':
+        'Solicitação de convite ao grupo com sucesso, aguarde um líder ou capitão te aceitar',
     },
   };
 

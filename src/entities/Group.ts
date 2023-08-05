@@ -1,7 +1,10 @@
+import { UserCharacterGroup } from '@/entities/UserCharacterGroup';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -39,4 +42,11 @@ export class Group {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt!: Date;
+
+  @OneToMany(
+    () => UserCharacterGroup,
+    userCharacterGroup => userCharacterGroup.userCharacterGroup
+  )
+  @JoinColumn({ name: 'group_id', referencedColumnName: 'id' })
+  groupCharacters!: UserCharacterGroup[];
 }

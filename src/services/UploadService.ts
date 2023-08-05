@@ -5,7 +5,7 @@ import pump from 'pump';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { FastifyRequest } from 'fastify';
 import { MultipartFile } from '@fastify/multipart';
-import { UserCharacterService } from './UserCharacterService';
+import { UserCharacterService } from '@/services/UserCharacterService';
 
 export class UploadService {
   private userCharacterService = new UserCharacterService();

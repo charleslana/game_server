@@ -1,6 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { AuthDto } from '@/dto/AuthDto';
-import { AuthService } from './AuthService';
+import { AuthService } from '@/services/AuthService';
 import { CreateUserDto } from '@/dto/CreateUserDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { formatDate } from '@/utils/utils';
@@ -10,7 +10,7 @@ import { UpdatePasswordDto } from '@/dto/UpdatePasswordDto';
 import { User } from '@/entities/User';
 import { UserRepository } from '@/repositories/UserRepository';
 import { UserRoleDto } from '@/dto/UserRoleDto';
-import { UserRoleService } from './UserRoleService';
+import { UserRoleService } from '@/services/UserRoleService';
 
 export class UserService {
   private saltRounds = 10;

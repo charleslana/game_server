@@ -1,12 +1,14 @@
 import BreedEnum from '@/enum/BreedEnum';
 import { Exclude, Expose } from 'class-transformer';
 import { User } from '@/entities/User';
+import { UserCharacterGroup } from '@/entities/UserCharacterGroup';
 import {
   Column,
   CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -112,4 +114,11 @@ export class UserCharacter {
   @ManyToOne(() => User, user => user.characters)
   @JoinColumn({ name: 'user_id' })
   user!: User;
+
+  @OneToMany(
+    () => UserCharacterGroup,
+    userCharacterGroup => userCharacterGroup.userCharacterGroup
+  )
+  @JoinColumn({ name: 'character_id', referencedColumnName: 'id' })
+  userCharacters!: UserCharacterGroup[];
 }
