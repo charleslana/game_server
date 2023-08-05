@@ -50,6 +50,9 @@ export class UserCharacterRepository {
         },
         active: true,
       },
+      order: {
+        id: 'DESC',
+      },
     });
   }
 
