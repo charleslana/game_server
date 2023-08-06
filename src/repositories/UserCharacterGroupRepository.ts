@@ -1,6 +1,6 @@
 import AppDataSource from '@/orm';
 import GroupRoleEnum from '@/enum/GroupRoleEnum';
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 import { UserCharacterGroup } from '@/entities/UserCharacterGroup';
 
 export class UserCharacterGroupRepository {
@@ -59,6 +59,23 @@ export class UserCharacterGroupRepository {
       return this.getGroupRoleId(a.role) - this.getGroupRoleId(b.role);
     });
     return sortedResults;
+  }
+
+  async findById(id: number): Promise<UserCharacterGroup | null> {
+    return await this.repository.findOne({
+      where: { id: id, active: false },
+    });
+  }
+
+  async deleteById(id: number): Promise<DeleteResult> {
+    return await this.repository.delete(id);
+  }
+
+  async deleteAllByCharacterId(characterId: number): Promise<DeleteResult> {
+    return await this.repository.delete({
+      userCharacter: { id: characterId },
+      active: false,
+    });
   }
 
   private getGroupRoleId(groupRole: GroupRoleEnum): number {

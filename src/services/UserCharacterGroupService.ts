@@ -41,4 +41,23 @@ export class UserCharacterGroupService {
       throw new ErrorResponse('group.character.already.exists');
     }
   }
+
+  async invite(
+    id: number,
+    characterId: number,
+    active: boolean
+  ): Promise<SuccessResponse> {
+    const userCharacterGroup = await this.repository.findById(id);
+    if (!userCharacterGroup) {
+      throw new ErrorResponse('invite.group.not.found');
+    }
+    if (active) {
+      userCharacterGroup.active = true;
+      await this.repository.save(userCharacterGroup);
+      await this.repository.deleteAllByCharacterId(characterId);
+      return new SuccessResponse('invite.group.accept.success');
+    }
+    await this.repository.deleteById(id);
+    return new SuccessResponse('invite.group.decline.success');
+  }
 }

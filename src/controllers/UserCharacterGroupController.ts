@@ -102,4 +102,36 @@ export default class UserCharacterController {
       return sendResponse(reply, error);
     }
   }
+
+  @POST('/invite/status/:id')
+  async invite(
+    request: FastifyRequest<{ Params: IdDto; Querystring: ActiveDto }>,
+    reply: FastifyReply
+  ) {
+    logger.info('Solicitar convite de grupo');
+    const lang = request.headers['accept-language'] || 'en';
+    let errorResponse = await paramsValidationMiddleware(IdDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    errorResponse = await queryValidationMiddleware(ActiveDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    const dto: IdDto = request.params;
+    const characterId = request.session.userCharacterId || 0;
+    try {
+      const response = await this.userCharacterGroupService.invite(
+        dto.id,
+        characterId,
+        request.query.active
+      );
+      return response.send(reply, lang);
+    } catch (error) {
+      if (error instanceof ErrorResponse) {
+        return error.send(reply, lang);
+      }
+      return sendResponse(reply, error);
+    }
+  }
 }
