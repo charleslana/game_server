@@ -1,5 +1,6 @@
 import GroupRoleEnum from '@/enum/GroupRoleEnum';
 import { CreateGroupDto } from '@/dto/CreateGroupDto';
+import { delay, inject, injectable } from 'tsyringe';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { Group } from '@/entities/Group';
 import { GroupRepository } from '@/repositories/GroupRepository';
@@ -11,9 +12,14 @@ import { UserCharacter } from '@/entities/UserCharacter';
 import { UserCharacterGroup } from '@/entities/UserCharacterGroup';
 import { UserCharacterGroupService } from '@/services/UserCharacterGroupService';
 
+@injectable()
 export class GroupService {
-  private repository = new GroupRepository();
-  private userCharacterGroupService = new UserCharacterGroupService();
+  constructor(
+    @inject(GroupRepository)
+    private repository: GroupRepository,
+    @inject(delay(() => UserCharacterGroupService))
+    private userCharacterGroupService: UserCharacterGroupService
+  ) {}
 
   async create(dto: CreateGroupDto): Promise<SuccessResponse> {
     const nameExists = await this.repository.existsByName(dto.name);
@@ -24,6 +30,9 @@ export class GroupService {
     if (tagExists) {
       throw new ErrorResponse('group.tag.exists');
     }
+    await this.userCharacterGroupService.existsByCharacterId(
+      dto.userCharacter.id
+    );
     const group = await this.repository.save(dto);
     const userCharacterGroup = new UserCharacterGroup();
     const userCharacter = new UserCharacter();
@@ -48,5 +57,12 @@ export class GroupService {
   async search(dto: SearchGroupDto): Promise<Group[]> {
     const searchResults = await this.repository.search(dto.query);
     return searchResults;
+  }
+
+  async existById(id: number): Promise<void> {
+    const exists = await this.repository.countById(id);
+    if (!exists) {
+      throw new ErrorResponse('group.not.found');
+    }
   }
 }

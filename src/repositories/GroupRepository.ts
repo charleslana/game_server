@@ -75,4 +75,9 @@ export class GroupRepository {
     });
     return !!existing;
   }
+
+  async countById(id: number): Promise<boolean> {
+    const count = await this.repository.count({ where: { id: id } });
+    return count > 0;
+  }
 }

@@ -15,15 +15,32 @@ export class UserCharacterGroupRepository {
     return await this.repository.save(newUserCharacterGroup);
   }
 
-  async existsByCharacterId(characterId: number): Promise<boolean> {
-    const existingCharacter = await this.repository.findOne({
+  async countByCharacterId(characterId: number): Promise<number> {
+    return await this.repository.count({
       where: {
         userCharacter: {
           id: characterId,
         },
+        active: true,
       },
     });
-    return !!existingCharacter;
+  }
+
+  async existsByCharacterIdAndGroupId(
+    characterId: number,
+    groupId: number
+  ): Promise<boolean> {
+    const existingCharacterGroup = await this.repository.findOne({
+      where: {
+        userCharacter: {
+          id: characterId,
+        },
+        userCharacterGroup: {
+          id: groupId,
+        },
+      },
+    });
+    return !!existingCharacterGroup;
   }
 
   async findAllByGroupIdAndActive(

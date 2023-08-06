@@ -36,6 +36,8 @@ export class MessageHandler {
         'An invitation request already exists for this group',
       'invite.group.success':
         'Group invitation request successfully, wait for a leader or captain to accept you',
+      'group.not.found': 'Group not found',
+      'group.character.already.exists': 'You are already active in a group',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -75,6 +77,8 @@ export class MessageHandler {
         'Já existe uma solicitação de convite para este grupo',
       'invite.group.success':
         'Solicitação de convite ao grupo com sucesso, aguarde um líder ou capitão te aceitar',
+      'group.not.found': 'Grupo não encontrado',
+      'group.character.already.exists': 'Você já está ativo em um grupo',
     },
   };
 

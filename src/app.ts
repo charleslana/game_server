@@ -6,6 +6,7 @@ import fastifyMultipart from '@fastify/multipart';
 import fastifySession from '@fastify/session';
 import logger from './utils/logger';
 import { bootstrap } from 'fastify-decorators';
+import { container } from '@/config/tsyringeConfig';
 import { resolve } from 'path';
 
 AppDataSource.initialize()
@@ -30,6 +31,8 @@ app.register(fastifySession, {
 });
 
 app.register(fastifyMultipart);
+
+app.decorate('container', container);
 
 app.register(bootstrap, {
   directory: resolve(__dirname, `controllers`),

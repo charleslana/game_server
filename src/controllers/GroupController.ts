@@ -1,6 +1,7 @@
 import logger from '@/utils/logger';
 import { authMiddleware } from '@/middlewares/authMiddleware';
 import { bodyValidationMiddleware } from '@/middlewares/bodyValidationMiddleware';
+import { container } from 'tsyringe';
 import { Controller, GET, Hook, POST } from 'fastify-decorators';
 import { CreateGroupDto } from '@/dto/CreateGroupDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
@@ -15,8 +16,8 @@ import { sessionMiddleware } from '@/middlewares/sessionMiddleware';
 import { UserCharacter } from '@/entities/UserCharacter';
 
 @Controller('/group')
-export default class UserCharacterController {
-  private groupService = new GroupService();
+export default class GroupController {
+  private groupService = container.resolve(GroupService);
 
   @Hook('preHandler')
   async validateAuthenticate(request: FastifyRequest, reply: FastifyReply) {
