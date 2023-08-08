@@ -1,4 +1,4 @@
-import BreedEnum from '@/enum/BreedEnum';
+import { Character } from '@/entities/Character';
 import { Exclude, Expose } from 'class-transformer';
 import { User } from '@/entities/User';
 import { UserCharacterGroup } from '@/entities/UserCharacterGroup';
@@ -24,26 +24,20 @@ export class UserCharacter {
   @Column({ type: 'int', default: 1 })
   level!: number;
 
-  @Column({
-    type: 'enum',
-    enum: BreedEnum,
-  })
-  breed!: BreedEnum;
+  @Column({ type: 'int', default: 1 })
+  hp!: number;
 
   @Column({ type: 'int', default: 1 })
-  life!: number;
-
-  @Column({ type: 'int', default: 1 })
-  ki!: number;
+  mp!: number;
 
   @Column({ type: 'int', default: 1 })
   strength!: number;
 
   @Column({ type: 'int', default: 1 })
-  endurance!: number;
+  intelligence!: number;
 
   @Column({ type: 'int', default: 1 })
-  speed!: number;
+  dexterity!: number;
 
   @Column({ type: 'int', default: 10 })
   point!: number;
@@ -51,8 +45,8 @@ export class UserCharacter {
   @Column({ name: 'spent_point', type: 'int', nullable: true })
   spentPoint!: number | null;
 
-  @Column({ type: 'bigint', default: 0 })
-  zeni!: number;
+  @Column({ type: 'bigint', default: 1000 })
+  alz!: number;
 
   @Column({ type: 'int', default: 0 })
   honor!: number;
@@ -110,6 +104,12 @@ export class UserCharacter {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt!: Date;
+
+  @ManyToOne(() => Character, character => character.userCharacters, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'character_id' })
+  character!: Character;
 
   @ManyToOne(() => User, user => user.characters)
   @JoinColumn({ name: 'user_id' })

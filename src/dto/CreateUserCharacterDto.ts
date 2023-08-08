@@ -1,8 +1,7 @@
-import BreedEnum from '@/enum/BreedEnum';
+import { Character } from '@/entities/Character';
 import { Transform } from 'class-transformer';
 import { User } from '@/entities/User';
 import {
-  IsEnum,
   IsNotEmpty,
   IsString,
   Matches,
@@ -22,9 +21,11 @@ export class CreateUserCharacterDto {
   @Transform(({ value }) => value?.trim())
   name!: string;
 
-  @IsEnum(BreedEnum)
-  @IsNotEmpty()
-  breed!: BreedEnum;
+  // @IsEnum(BreedEnum)
+  // @IsNotEmpty()
+  // breed!: BreedEnum;
+
+  character!: Character;
 
   user!: User;
 }

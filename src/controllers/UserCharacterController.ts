@@ -1,6 +1,7 @@
 import logger from '@/utils/logger';
 import { authMiddleware } from '@/middlewares/authMiddleware';
 import { bodyValidationMiddleware } from '@/middlewares/bodyValidationMiddleware';
+import { Character } from '@/entities/Character';
 import { Controller, DELETE, GET, Hook, PATCH, POST } from 'fastify-decorators';
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
@@ -14,7 +15,7 @@ import { User } from '@/entities/User';
 import { UserCharacter } from '@/entities/UserCharacter';
 import { UserCharacterService } from '@/services/UserCharacterService';
 
-@Controller('/character')
+@Controller('/user/character')
 export default class UserCharacterController {
   private userCharacterService = new UserCharacterService();
 
@@ -27,14 +28,18 @@ export default class UserCharacterController {
     }
   }
 
-  @POST()
+  @POST('/new/:id')
   async create(
-    request: FastifyRequest<{ Body: CreateUserCharacterDto }>,
+    request: FastifyRequest<{ Body: CreateUserCharacterDto; Params: IdDto }>,
     reply: FastifyReply
   ) {
     logger.info('Criar personagem');
     const lang = request.headers['accept-language'] || 'en';
-    const errorResponse = await bodyValidationMiddleware(
+    let errorResponse = await paramsValidationMiddleware(IdDto, request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+    errorResponse = await bodyValidationMiddleware(
       CreateUserCharacterDto,
       request
     );
@@ -44,9 +49,12 @@ export default class UserCharacterController {
     const createUserCharacterDto: CreateUserCharacterDto = request.body;
     const userId = request.user.id;
     try {
-      const user: User = new User();
+      const user = new User();
       user.id = userId;
+      const character = new Character();
+      character.id = request.params.id;
       createUserCharacterDto.user = user;
+      createUserCharacterDto.character = character;
       const response = await this.userCharacterService.create(
         createUserCharacterDto
       );

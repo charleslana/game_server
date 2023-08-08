@@ -29,7 +29,7 @@ export default class UploadController {
     }
   }
 
-  @PATCH('/character')
+  @PATCH('/user/character')
   async sendUploadImage(request: FastifyRequest, reply: FastifyReply) {
     logger.info('Enviar imagem do personagem');
     const lang = request.headers['accept-language'] || 'en';

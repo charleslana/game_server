@@ -10,7 +10,7 @@ const AppDataSource = new DataSource({
   entities: [join(__dirname, '/entities/*{.ts,.js}')],
   synchronize: true,
   useUTC: true,
-  logging: true,
+  logging: false,
 });
 
 export default AppDataSource;

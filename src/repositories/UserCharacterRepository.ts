@@ -53,6 +53,7 @@ export class UserCharacterRepository {
       order: {
         id: 'DESC',
       },
+      relations: ['character'],
     });
   }
 

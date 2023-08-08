@@ -43,6 +43,7 @@ export class MessageHandler {
         'Group invitation request successfully accepted',
       'invite.group.decline.success':
         'Group invite request successfully declined',
+      'character.not.found': 'Character not found',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -90,6 +91,7 @@ export class MessageHandler {
         'Solicitação de convite de grupo aceito com sucesso',
       'invite.group.decline.success':
         'Solicitação de convite de grupo recusado com sucesso',
+      'character.not.found': 'Personagem não encontrado',
     },
   };
 

@@ -1,3 +1,4 @@
+import { CharacterService } from '@/services/CharacterService';
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
 import { formatDate, generateRandomString } from '@/utils/utils';
@@ -8,14 +9,15 @@ import { UserCharacterRepository } from '@/repositories/UserCharacterRepository'
 
 export class UserCharacterService {
   private userCharacterRepository = new UserCharacterRepository();
-  private characterMaxAmount = 3;
-  private hourOfNameTime = 1;
+  private characterService = new CharacterService();
 
   async create(dto: CreateUserCharacterDto): Promise<SuccessResponse> {
+    const characterMaxAmount = 5;
     const count = await this.countUserCharacters(dto.user.id);
-    if (count >= this.characterMaxAmount) {
+    if (count >= characterMaxAmount) {
       throw new ErrorResponse('user.character.max.amount');
     }
+    await this.characterService.getById(dto.character.id);
     await this.checkCharacterNameExists(dto.name);
     await this.userCharacterRepository.save(dto);
     return new SuccessResponse('user.character.success', 201);
@@ -84,7 +86,8 @@ export class UserCharacterService {
     }
     await this.checkCharacterNameExistsForOtherPlayer(dto.name, characterId);
     const currentDate = new Date();
-    currentDate.setHours(currentDate.getHours() + this.hourOfNameTime);
+    const hourOfNameTime = 1;
+    currentDate.setHours(currentDate.getHours() + hourOfNameTime);
     userCharacter.name = dto.name;
     userCharacter.nameTime = currentDate;
     await this.userCharacterRepository.save(userCharacter);
