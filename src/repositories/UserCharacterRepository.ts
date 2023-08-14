@@ -63,6 +63,7 @@ export class UserCharacterRepository {
         id: id,
         active: true,
       },
+      relations: ['character'],
     });
   }
 
