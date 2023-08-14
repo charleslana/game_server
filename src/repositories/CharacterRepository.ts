@@ -16,6 +16,10 @@ export class CharacterRepository {
   }
 
   async findAll(): Promise<Character[]> {
-    return await this.repository.find();
+    return await this.repository.find({
+      order: {
+        id: 'ASC',
+      },
+    });
   }
 }
