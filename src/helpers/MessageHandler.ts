@@ -14,6 +14,8 @@ export class MessageHandler {
       'user.character.max.amount': 'Maximum number of characters reached',
       'user.character.success': 'Character created successfully',
       'user.character.not.found': 'Character not found',
+      'user.character.min.level':
+        'Character cannot be deleted, character of {param} level or higher cannot be deleted',
       'user.character.inactivated': 'Character deleted successfully',
       'user.character.name.exists': 'Character name already exists',
       'upload.is.multipart':
@@ -59,6 +61,8 @@ export class MessageHandler {
       'user.character.max.amount': 'Quantidade máxima de personagens atingido',
       'user.character.success': 'Personagem criado com sucesso',
       'user.character.not.found': 'Personagem não encontrado',
+      'user.character.min.level':
+        'Personagem não pode ser excluído, personagem de nível {param} ou mais não podem ser excluídos',
       'user.character.inactivated': 'Personagem excluído com sucesso',
       'user.character.name.exists': 'Nome do personagem já existe',
       'upload.is.multipart':

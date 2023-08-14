@@ -31,6 +31,14 @@ export class UserCharacterService {
     if (!userCharacter) {
       throw new ErrorResponse('user.character.not.found');
     }
+    const minLevel = 100;
+    if (userCharacter.level >= minLevel) {
+      throw new ErrorResponse(
+        'user.character.min.level',
+        400,
+        minLevel.toString()
+      );
+    }
     userCharacter.active = false;
     userCharacter.name = generateRandomString();
     await this.userCharacterRepository.save(userCharacter);
