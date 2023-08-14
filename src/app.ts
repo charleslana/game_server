@@ -1,4 +1,5 @@
 import AppDataSource from '@/orm';
+import cors from '@fastify/cors';
 import CronJobService from './services/CronjobService';
 import fastify from 'fastify';
 import fastifyCookie from '@fastify/cookie';
@@ -22,6 +23,8 @@ CronJobService.start();
 const app = fastify();
 
 app.register(fastifyCookie);
+
+app.register(cors);
 
 app.register(fastifySession, {
   secret: process.env.SESSION_SECRET as string,
