@@ -46,6 +46,8 @@ export class MessageHandler {
       'invite.group.decline.success':
         'Group invite request successfully declined',
       'character.not.found': 'Character not found',
+      'user.character.insufficient.points': 'Insufficient distribute points',
+      'user.character.points.success': 'Points distributed successfully',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -96,6 +98,8 @@ export class MessageHandler {
       'invite.group.decline.success':
         'Solicitação de convite de grupo recusado com sucesso',
       'character.not.found': 'Personagem não encontrado',
+      'user.character.insufficient.points': 'Pontos de distribuir insuficiente',
+      'user.character.points.success': 'Pontos distribuídos com sucesso',
     },
   };
 

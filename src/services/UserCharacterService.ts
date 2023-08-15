@@ -1,3 +1,4 @@
+import { AttributeDto } from '@/dto/AttributeDto';
 import { CharacterService } from '@/services/CharacterService';
 import { CreateUserCharacterDto } from '@/dto/CreateUserCharacterDto';
 import { ErrorResponse } from '@/helpers/ErrorResponse';
@@ -100,6 +101,27 @@ export class UserCharacterService {
     userCharacter.nameTime = currentDate;
     await this.userCharacterRepository.save(userCharacter);
     return new SuccessResponse('user.character.name.updated');
+  }
+
+  async distributePoints(dto: AttributeDto): Promise<SuccessResponse> {
+    const userCharacter = await this.getByIdAndUserId(
+      dto.userId,
+      dto.characterId
+    );
+    const strength = dto.strength ?? 0;
+    const intelligence = dto.intelligence ?? 0;
+    const dexterity = dto.dexterity ?? 0;
+    const points = strength + intelligence + dexterity;
+    if (userCharacter.point < points) {
+      throw new ErrorResponse('user.character.insufficient.points');
+    }
+    userCharacter.strength += strength;
+    userCharacter.intelligence += intelligence;
+    userCharacter.dexterity += dexterity;
+    userCharacter.spentPoint = (userCharacter.spentPoint ?? 0) + points;
+    userCharacter.point -= points;
+    await this.userCharacterRepository.save(userCharacter);
+    return new SuccessResponse('user.character.points.success');
   }
 
   private async checkCharacterNameExistsForOtherPlayer(
