@@ -24,7 +24,10 @@ const app = fastify();
 
 app.register(fastifyCookie);
 
-app.register(cors);
+app.register(cors, {
+  origin: true,
+  credentials: true,
+});
 
 app.register(fastifySession, {
   secret: process.env.SESSION_SECRET as string,
