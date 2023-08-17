@@ -48,6 +48,7 @@ export class MessageHandler {
       'character.not.found': 'Character not found',
       'user.character.insufficient.points': 'Insufficient distribute points',
       'user.character.points.success': 'Points distributed successfully',
+      'item.not.found': 'Item not found',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -100,6 +101,7 @@ export class MessageHandler {
       'character.not.found': 'Personagem não encontrado',
       'user.character.insufficient.points': 'Pontos de distribuir insuficiente',
       'user.character.points.success': 'Pontos distribuídos com sucesso',
+      'item.not.found': 'Item não encontrado',
     },
   };
 

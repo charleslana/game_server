@@ -60,14 +60,14 @@ export class UserCharacter {
   @Column({ type: 'bigint', default: 0 })
   experience!: number;
 
-  @CreateDateColumn({
+  @Column({
     name: 'name_time',
     type: 'timestamp',
     nullable: true,
   })
   nameTime!: Date | null;
 
-  @CreateDateColumn({
+  @Column({
     name: 'vip_time',
     type: 'timestamp',
     nullable: true,

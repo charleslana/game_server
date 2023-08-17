@@ -29,7 +29,7 @@ export class User {
   @Column({ type: 'bigint', default: 0 })
   credit!: number;
 
-  @CreateDateColumn({
+  @Column({
     name: 'banned_time',
     type: 'timestamp',
     nullable: true,

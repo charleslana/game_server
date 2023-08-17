@@ -1,7 +1,9 @@
+import logger from '@/utils/logger';
 import { faker } from '@faker-js/faker';
 import { FastifyReply } from 'fastify';
 
 export function sendResponse(reply: FastifyReply, message?: unknown) {
+  logger.error(message);
   reply.code(409).send(message);
 }
 

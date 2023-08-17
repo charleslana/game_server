@@ -1,14 +1,15 @@
 import logger from '@/utils/logger';
 import { authMiddleware } from '@/middlewares/authMiddleware';
-import { CharacterService } from '@/services/CharacterService';
 import { Controller, GET, Hook } from 'fastify-decorators';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import { instanceToPlain } from 'class-transformer';
+import { ItemService } from '@/services/ItemService';
 import { sendResponse } from '@/utils/utils';
+import { sessionMiddleware } from '@/middlewares/sessionMiddleware';
 
-@Controller('/character')
-export default class CharacterController {
-  private characterService = new CharacterService();
+@Controller('/item')
+export default class ItemController {
+  private itemService = new ItemService();
 
   @Hook('preHandler')
   async validateAuthenticate(request: FastifyRequest, reply: FastifyReply) {
@@ -19,15 +20,22 @@ export default class CharacterController {
     }
   }
 
+  @Hook('preHandler')
+  async validateSession(request: FastifyRequest, reply: FastifyReply) {
+    const lang = request.headers['accept-language'] || 'en';
+    const errorResponse = await sessionMiddleware(request);
+    if (errorResponse) {
+      return errorResponse.send(reply, lang);
+    }
+  }
+
   @GET()
   async getAll(_request: FastifyRequest, reply: FastifyReply) {
-    logger.info('Buscar todos personagens');
+    logger.info('Buscar todos itens');
     try {
-      const characters = await this.characterService.getAll();
-      const characterResponse = characters.map(character =>
-        instanceToPlain(character)
-      );
-      reply.send(characterResponse);
+      const items = await this.itemService.getAll();
+      const itemResponse = items.map(item => instanceToPlain(item));
+      reply.send(itemResponse);
     } catch (error) {
       return sendResponse(reply, error);
     }
