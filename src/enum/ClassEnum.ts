@@ -5,6 +5,7 @@ enum ClassEnum {
   ForceArcher = 'forceArcher',
   ForceShielder = 'forceShielder',
   ForceBlader = 'forceBlader',
+  Gladiator = 'gladiator',
   ForceGunner = 'forceGunner',
   DarkMage = 'darkMage',
 }
