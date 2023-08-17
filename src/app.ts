@@ -32,7 +32,7 @@ app.register(cors, {
 app.register(fastifySession, {
   secret: process.env.SESSION_SECRET as string,
   cookie: {
-    secure: false,
+    secure: process.env.COOKIE_SECURE as unknown as boolean,
   },
 });
 
