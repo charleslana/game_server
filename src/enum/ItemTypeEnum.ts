@@ -1,7 +1,7 @@
 enum ItemTypeEnum {
   Equipment = 'equipment',
   Consumable = 'consumable',
-  Mission = 'mission',
+  Other = 'other',
 }
 
 export default ItemTypeEnum;
