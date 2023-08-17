@@ -80,12 +80,8 @@ export class Item {
   @Column({ name: 'dexterity_required', type: 'int', nullable: true })
   dexterityRequired!: number | null;
 
-  @Column({
-    name: 'duration_time',
-    type: 'timestamp',
-    nullable: true,
-  })
-  durationTime!: Date | null;
+  @Column({ name: 'duration_hour', type: 'int', nullable: true })
+  durationHour!: number | null;
 
   @CreateDateColumn({
     name: 'created_at',
