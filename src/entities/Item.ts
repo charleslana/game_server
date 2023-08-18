@@ -2,10 +2,13 @@ import ClassEnum from '@/enum/ClassEnum';
 import ItemConsumableTypeEnum from '@/enum/ItemConsumableTypeEnum';
 import ItemEquipmentTypeEnum from '@/enum/ItemEquipmentTypeEnum';
 import ItemTypeEnum from '@/enum/ItemTypeEnum';
+import { UserCharacterItem } from '@/entities/UserCharacterItem';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -96,4 +99,11 @@ export class Item {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt!: Date;
+
+  @OneToMany(
+    () => UserCharacterItem,
+    userCharacterItem => userCharacterItem.item
+  )
+  @JoinColumn({ name: 'item_id', referencedColumnName: 'id' })
+  userCharacterItems!: UserCharacterItem[];
 }

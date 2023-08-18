@@ -13,12 +13,11 @@ import { resolve } from 'path';
 AppDataSource.initialize()
   .then(() => {
     logger.info('Conectado ao banco de dados');
+    CronJobService.start();
   })
   .catch(error => {
     logger.error('Erro ao conectar ao banco de dados:', error);
   });
-
-CronJobService.start();
 
 const app = fastify();
 

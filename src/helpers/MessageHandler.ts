@@ -49,6 +49,8 @@ export class MessageHandler {
       'user.character.insufficient.points': 'Insufficient distribute points',
       'user.character.points.success': 'Points distributed successfully',
       'item.not.found': 'Item not found',
+      'user.character.item.max.amount': 'Maximum amount of character items hit',
+      'user.character.item.not.found': 'Character item not found',
     },
     pt: {
       'user.email.exists': 'Já existe o email cadastrado.',
@@ -102,6 +104,9 @@ export class MessageHandler {
       'user.character.insufficient.points': 'Pontos de distribuir insuficiente',
       'user.character.points.success': 'Pontos distribuídos com sucesso',
       'item.not.found': 'Item não encontrado',
+      'user.character.item.max.amount':
+        'Quantidade máxima de itens do personagem atingido',
+      'user.character.item.not.found': 'Item do personagem não encontrado',
     },
   };
 

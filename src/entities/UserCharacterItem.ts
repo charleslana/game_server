@@ -1,6 +1,4 @@
-import GroupRoleEnum from '@/enum/GroupRoleEnum';
-import { Exclude } from 'class-transformer';
-import { Group } from '@/entities/Group';
+import { Item } from '@/entities/Item';
 import { UserCharacter } from '@/entities/UserCharacter';
 import {
   Column,
@@ -12,24 +10,19 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-@Entity({ name: 'tb_user_character_group' })
-export class UserCharacterGroup {
+@Entity({ name: 'tb_user_character_item' })
+export class UserCharacterItem {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id!: number;
 
-  @Column({
-    type: 'enum',
-    enum: GroupRoleEnum,
-    default: GroupRoleEnum.Member,
-  })
-  role!: GroupRoleEnum;
+  @Column({ type: 'int', nullable: true })
+  enhancement!: number | null;
 
-  @Column({ name: 'arena_point', type: 'int', default: 0 })
-  arenaPoint!: number;
+  @Column({ name: 'duration_time', type: 'timestamp', nullable: true })
+  durationTime!: Date | null;
 
-  @Column({ type: 'boolean', default: false })
-  @Exclude({ toPlainOnly: true })
-  active!: boolean;
+  @Column({ type: 'boolean', nullable: true })
+  equipped!: boolean | null;
 
   @CreateDateColumn({
     name: 'created_at',
@@ -45,15 +38,19 @@ export class UserCharacterGroup {
   })
   updatedAt!: Date;
 
-  @ManyToOne(() => Group, group => group.groupCharacters, { nullable: false })
-  @JoinColumn({ name: 'group_id' })
-  userCharacterGroup!: Group;
-
   @ManyToOne(
     () => UserCharacter,
     userCharacter => userCharacter.userCharacters,
-    { nullable: false }
+    {
+      nullable: false,
+    }
   )
   @JoinColumn({ name: 'character_id' })
   userCharacter!: UserCharacter;
+
+  @ManyToOne(() => Item, item => item.userCharacterItems, {
+    nullable: false,
+  })
+  @JoinColumn({ name: 'item_id' })
+  item!: Item;
 }
