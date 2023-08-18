@@ -8,11 +8,11 @@ export class UserCharacterItemService {
   private itemService = new ItemService();
 
   async create(userCharacterItem: UserCharacterItem): Promise<void> {
-    const characterMaxAmount = 5;
+    const maxAmount = 50;
     const count = await this.userCharacterItemRepository.countByCharacterId(
       userCharacterItem.userCharacter.id
     );
-    if (count >= characterMaxAmount) {
+    if (count >= maxAmount) {
       throw new ErrorResponse('user.character.item.max.amount');
     }
     await this.itemService.getById(userCharacterItem.item.id);
