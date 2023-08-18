@@ -28,11 +28,11 @@ export class AuthService {
       const cleanToken = token.replace('Bearer ', '');
       const decodedToken = jwt.verify(cleanToken, this.secretKey) as IAuth;
       if (!('user' in decodedToken) || !('id' in decodedToken.user)) {
-        throw new ErrorResponse('invalid.token', 403);
+        throw new ErrorResponse('invalid.token', 401);
       }
       return decodedToken;
     } catch (error) {
-      throw new ErrorResponse('invalid.token', 403);
+      throw new ErrorResponse('invalid.token', 401);
     }
   }
 }

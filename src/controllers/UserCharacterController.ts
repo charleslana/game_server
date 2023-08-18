@@ -143,7 +143,7 @@ export default class UserCharacterController {
     try {
       await this.userCharacterService.getByIdAndUserId(userId, dto.id);
       request.session.userCharacterId = dto.id;
-      reply.send();
+      reply.send({});
     } catch (error) {
       if (error instanceof ErrorResponse) {
         return error.send(reply, lang);
@@ -157,7 +157,7 @@ export default class UserCharacterController {
     logger.info('Deslogar personagem');
     try {
       request.session.userCharacterId = undefined;
-      reply.send();
+      reply.send({});
     } catch (error) {
       return sendResponse(reply, error);
     }
