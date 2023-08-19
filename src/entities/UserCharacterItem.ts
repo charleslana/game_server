@@ -1,3 +1,4 @@
+import { Expose } from 'class-transformer';
 import { Item } from '@/entities/Item';
 import { UserCharacter } from '@/entities/UserCharacter';
 import {
@@ -23,6 +24,15 @@ export class UserCharacterItem {
 
   @Column({ type: 'boolean', nullable: true })
   equipped!: boolean | null;
+
+  @Expose()
+  get price(): number {
+    if (this.item.price && this.enhancement) {
+      const calculatedPrice = this.item.price * this.enhancement;
+      return calculatedPrice;
+    }
+    return this.item.price ?? 0;
+  }
 
   @CreateDateColumn({
     name: 'created_at',

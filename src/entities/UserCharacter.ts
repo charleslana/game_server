@@ -82,9 +82,8 @@ export class UserCharacter {
   get avatar(): string | null {
     if (this.image) {
       return `${process.env.HOST}/public/upload/character/${this.image}`;
-    } else {
-      return null;
     }
+    return null;
   }
 
   @Column({ type: 'boolean', default: true })

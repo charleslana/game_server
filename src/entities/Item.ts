@@ -12,6 +12,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'tb_item' })
 export class Item {
@@ -85,6 +86,10 @@ export class Item {
 
   @Column({ name: 'duration_hour', type: 'int', nullable: true })
   durationHour!: number | null;
+
+  @Column({ type: 'bigint', nullable: true })
+  @Exclude({ toPlainOnly: true })
+  price!: number | null;
 
   @CreateDateColumn({
     name: 'created_at',
