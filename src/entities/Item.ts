@@ -2,6 +2,7 @@ import ClassEnum from '@/enum/ClassEnum';
 import ItemConsumableTypeEnum from '@/enum/ItemConsumableTypeEnum';
 import ItemEquipmentTypeEnum from '@/enum/ItemEquipmentTypeEnum';
 import ItemTypeEnum from '@/enum/ItemTypeEnum';
+import { Exclude } from 'class-transformer';
 import { UserCharacterItem } from '@/entities/UserCharacterItem';
 import {
   Column,
@@ -12,14 +13,13 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'tb_item' })
 export class Item {
   @PrimaryGeneratedColumn({ type: 'bigint' })
   id!: number;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: 255 })
   name!: string;
 
   @Column({ type: 'text', nullable: true })
@@ -41,7 +41,19 @@ export class Item {
   mp!: number | null;
 
   @Column({ type: 'int', nullable: true })
+  attack!: number | null;
+
+  @Column({ name: 'magic_attack', type: 'int', nullable: true })
+  magicAttack!: number | null;
+
+  @Column({ name: 'attack_rate', type: 'int', nullable: true })
+  attackRate!: number | null;
+
+  @Column({ type: 'int', nullable: true })
   defense!: number | null;
+
+  @Column({ name: 'magic_defense', type: 'int', nullable: true })
+  magicDefense!: number | null;
 
   @Column({
     type: 'enum',
